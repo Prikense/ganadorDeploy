@@ -12,7 +12,7 @@
 			border: 0 none;
 			padding: 0;
 			text-align: center;
-			background-color: black;
+			/* background-color: #95c3ff; */
 		}
 
 		#canvas {
@@ -53,12 +53,13 @@
 
 		#status-progress {
 			width: 366px;
-			height: 7px;
-			background-color: #38363A;
-			border: 1px solid #444246;
-			padding: 1px;
-			box-shadow: 0 0 2px 1px #1B1C22;
-			border-radius: 2px;
+			height: 10px;
+			background-color: #0b3b96;
+			border: 2px solid #ffffff;
+			padding: 0px;
+			overflow: hidden;
+			/* box-shadow: 0 0 2px 1px #1B1C22; */
+			border-radius: 10px;
 			visibility: visible;
 		}
 
@@ -73,10 +74,11 @@
 			width: 0;
 			box-sizing: border-box;
 			transition: width 0.5s linear;
-			background-color: #202020;
-			border: 1px solid #222223;
-			box-shadow: 0 0 1px 1px #27282E;
-			border-radius: 3px;
+			background-image: linear-gradient(to right,#9ed4ff,#3dadfb, #3dadfb, #3dadfb);
+			background-size: 366px 16px;
+			/* border: 1px solid #222223; */
+			/* box-shadow: 0 0 1px 1px #27282E; */
+			border-radius: 0px;
 		}
 
 		#status-indeterminate {
@@ -111,6 +113,19 @@
 			padding: 4px 6px;
 			visibility: visible;
 		}
+
+		#background {
+			background-image: url("Background.png");
+			background-size:100vw 100vh;
+			position:absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
 	</style>
 <link id='-gd-engine-icon' rel='icon' type='image/png' href='index.icon.png' />
 <link rel='apple-touch-icon' href='index.apple-touch-icon.png'/>
@@ -121,6 +136,52 @@
 		HTML5 canvas appears to be unsupported in the current browser.<br />
 		Please try updating or use a different browser.
 	</canvas>
+	<div id="background">
+		<img src="logo.png" alt="croceta oficial NFL Ganador"
+		style="
+			position: absolute;
+			top: 30vh;
+
+			width: 50%;
+			height: 15%;
+			max-width: 270px;
+			max-height: 194px;
+			"
+			/>
+		<img src="disclaimersmol.png" alt="La NFL y sus equipos se eximen de toda responsabilidad realcionada con la ejecución de la presente promoción/producto"
+		style="
+			position: absolute;
+			bottom: 3vh;
+
+			width: 80%;
+			height: 5%;
+			max-width: 332px;
+			max-height: 45px;
+			"
+			/>
+		<img src="juego.png" alt="juego"
+		style="	
+			position: absolute;
+			bottom: 11vh;
+
+			width: 21%;
+			height: 10%;
+			max-width: 90px;
+			max-height: 90px;
+			"
+			/>
+		<img src="motivation.png" alt="Prepárate para divertirte  demostrar quien es el Ganador"
+		style="
+			position: absolute;
+			top: 55vh;
+
+			width: 70%;
+			height: 5%;
+			max-width: 290px;
+			max-height: 45px;
+			"
+			/>
+	</div> 
 	<div id='status'>
 		<div id='status-progress' style='display: none;' oncontextmenu='event.preventDefault();'><div id ='status-progress-inner'></div></div>
 		<div id='status-indeterminate' style='display: none;' oncontextmenu='event.preventDefault();'>
@@ -139,7 +200,7 @@
 	<script type='text/javascript' src='index.js'></script>
 	<script type='text/javascript'>//<![CDATA[
 
-		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":50910720,"index.wasm":18795755},"focusCanvas":true,"gdnativeLibs":[]};
+		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":65181392,"index.wasm":18795755},"focusCanvas":true,"gdnativeLibs":[]};
 		var engine = new Engine(GODOT_CONFIG);
 
 		(function() {
@@ -148,6 +209,7 @@
 			var statusProgressInner = document.getElementById('status-progress-inner');
 			var statusIndeterminate = document.getElementById('status-indeterminate');
 			var statusNotice = document.getElementById('status-notice');
+			var bckg = document.getElementById("background");
 
 			var initializing = true;
 			var statusMode = 'hidden';
@@ -181,6 +243,7 @@
 						statusNotice.style.display = 'block';
 						break;
 					case 'hidden':
+						bckg.style.display = 'none';
 						break;
 					default:
 						throw new Error('Invalid status mode');
@@ -220,7 +283,8 @@
 			if (!Engine.isWebGLAvailable()) {
 				displayFailureNotice('WebGL not available');
 			} else {
-				setStatusMode('indeterminate');
+				setStatusMode('progress');
+				// statusProgressInner.style.width = 50 + '%';
 				engine.startGame({
 					'onProgress': function (current, total) {
 						if (total > 0) {
@@ -238,6 +302,7 @@
 					},
 				}).then(() => {
 					setStatusMode('hidden');
+				
 					initializing = false;
 				}, displayFailureNotice);
 			}
