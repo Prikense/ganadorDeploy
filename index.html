@@ -57,7 +57,7 @@
 			background-color: #0b3b96;
 			border: 2px solid #ffffff;
 			padding: 0px;
-			overflow: clip;
+			/* overflow: clip; */
 			/* box-shadow: 0 0 2px 1px #1B1C22; */
 			border-radius: 10px;
 			visibility: visible;
@@ -79,7 +79,7 @@
 			background-size: 366px 16px;
 			/* border: 1px solid #222223; */
 			/* box-shadow: 0 0 1px 1px #27282E; */
-			border-radius: 0px;
+			border-radius: 10px;
 		}
 
 		#status-indeterminate {
@@ -286,26 +286,26 @@
 			} else {
 				setStatusMode('progress');
 				statusProgressInner.style.width = 50 + '%';
-				// engine.startGame({
-				// 	'onProgress': function (current, total) {
-				// 		if (total > 0) {
-				// 			statusProgressInner.style.width = current/total * 100 + '%';
-				// 			setStatusMode('progress');
-				// 			if (current === total) {
-				// 				// wait for progress bar animation
-				// 				setTimeout(() => {
-				// 					setStatusMode('indeterminate');
-				// 				}, 500);
-				// 			}
-				// 		} else {
-				// 			setStatusMode('indeterminate');
-				// 		}
-				// 	},
-				// }).then(() => {
-				// 	setStatusMode('hidden');
+				engine.startGame({
+					'onProgress': function (current, total) {
+						if (total > 0) {
+							statusProgressInner.style.width = current/total * 100 + '%';
+							setStatusMode('progress');
+							if (current === total) {
+								// wait for progress bar animation
+								setTimeout(() => {
+									setStatusMode('indeterminate');
+								}, 500);
+							}
+						} else {
+							setStatusMode('indeterminate');
+						}
+					},
+				}).then(() => {
+					setStatusMode('hidden');
 				
-				// 	initializing = false;
-				// }, displayFailureNotice);
+					initializing = false;
+				}, displayFailureNotice);
 			}
 		})();
 	//]]></script>
